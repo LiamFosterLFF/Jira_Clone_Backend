@@ -1,0 +1,3 @@
+[submodule "bug-project"]
+	path = bug-project
+	url = ./bug-project

@@ -1,0 +1,11 @@
+Still To Do
+Setup Feed
+Set up data to update every time the feed updates
+Setup Board
+Hookup Settings?
+Implement Auth
+Hook up issue delete button?
+Make delete confirmation modal look pretty?
+Fix submit buttons so they close the modal
+Make form validation for confirm password
+Rewrite routes so that they use app.param
