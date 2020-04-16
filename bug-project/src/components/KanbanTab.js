@@ -111,6 +111,7 @@ const KanbanTab = () => {
     const handleIssueClick = (e, column) => {
         console.log(column, column.items.filter(item => item.id === e.target.dataset.rbdDraggableId))
         setModalIsOpen(true)
+        
     }
 
     
