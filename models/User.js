@@ -6,15 +6,11 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  firstname: {
-    type: String,
-    required: true
-  },
-  lastname: {
-    type: String,
-    required: true
-  },
   password: {
+    type: String,
+    required: true
+  },
+  avatar: {
     type: String,
     required: true
   },

@@ -502,7 +502,6 @@ const CommentsDisplay = styled.div`
 `;
 
 const Modal = (props) => {
-    console.log(props.card.currentIssueType);
     
     const [showIssuePicker, setShowIssuePicker] = useState(false)
     const [showCommentsButtons, setShowCommentsButtons] = useState(false)
@@ -513,20 +512,7 @@ const Modal = (props) => {
     const [showAssignedUserPicker, setShowAssignedUserPicker] = useState(false)
 
 
-    useEffect(() => {
-        setCurrentIssueType(props.card.currentIssueType)
-         setCurrentIssueType(props.card.currentIssueType)
-         setTitle(props.card.title)
-         setValue(props.card.value);
-         setAddCommentText({ value: "" })
-         setCommentsText(props.card.commentsText)
-         setEstimatedTime(props.card.estimatedTime)
-         setCurrentStatusType(props.card.currentStatusType)
-         setCurrentPriorityType(props.card.currentPriorityType)
-         setCurrentReportingUser(props.card.currentReportingUser)
-         setCurrentAssignedUsers(props.card.currentAssignedUsers)
-    }, [props.card])
-
+    
 
 
     const [currentIssueType, setCurrentIssueType] = useState(props.card.currentIssueType)
@@ -538,10 +524,21 @@ const Modal = (props) => {
     const [currentStatusType, setCurrentStatusType] = useState(props.card.currentStatusType)
     const [currentPriorityType, setCurrentPriorityType] = useState(props.card.currentPriorityType)
     const [currentReportingUser, setCurrentReportingUser] = useState(props.card.currentReportingUser)
-    const [currentAssignedUsers, setCurrentAssignedUsers] = useState(props.card.currentAssignedUsers)
-    console.log(currentIssueType);
+    const [currentAssignedUsers, setCurrentAssignedUsers] = useState(props.card.issueAssignedUsers)
     
-
+    useEffect(() => {
+        setCurrentIssueType(props.card.currentIssueType)
+         setCurrentIssueType(props.card.currentIssueType)
+         setTitle(props.card.title)
+         setValue(props.card.value);
+         setAddCommentText({ value: "" })
+         setCommentsText(props.card.commentsText)
+         setEstimatedTime(props.card.estimatedTime)
+         setCurrentStatusType(props.card.currentStatusType)
+         setCurrentPriorityType(props.card.currentPriorityType)
+         setCurrentReportingUser(props.card.currentReportingUser)
+         setCurrentAssignedUsers(props.card.issueAssignedUsers)
+    }, [props.card])
 
     const modalBox = useRef()
     const issuePicker = useRef()
@@ -595,219 +592,291 @@ const Modal = (props) => {
     }
 
     
+    
+
+    
+
+    const updateCard = (changedValue, dataType) => {
+        let updatedCard = Object.assign({}, props.card)
+        updatedCard[dataType].name = changedValue
+        props.setCard(updatedCard)
+    }
+    
+
     const handleTitleChange = (e) => {
-        setTitle({value: e.target.value});
-        
+        updateCard({ value: e.target.value }, "issueTitle");
+
     };
 
-    
+    const getUserAvatar = (userName) => {
+        const selectedUser = props.allUsers.find(user => user.name === userName)
+        return (selectedUser) ? selectedUser.avatar : ""
+    }
 
-    const issueTypeRender = (currentIssueType) => {
+    const renderDropdownMenu = (dataType) => {
 
-        const handleOptionClick = (e, type) => {
-            setCurrentIssueType(type)
-            setShowIssuePicker(false)
-        }
-        const issueTypes = {
-            "Task": faCheckSquare,
-            "Bug": faExclamationCircle,
-            "Story": faBookmark
-        }
+
+
         
-        const options = Object.keys(issueTypes).filter(type => type !== currentIssueType)
-        const optionsJSX = options.map(type => {
-            return (
-                <div className="option" onClick={(e) => handleOptionClick(e, type)}>
-                    <FontAwesomeIcon icon={issueTypes[type]}/>
-                    <div className="issue-type-text">{type}</div>
-                </div>
-            )
-        })
-
-        return (
-            <div>
-                <div className="current-type" onClick={e => setShowIssuePicker(true)}>
-                    <FontAwesomeIcon icon={issueTypes[currentIssueType]} />
-                    <div className="issue-type-text">{currentIssueType}</div>
-                </div>
-                <div className="dropdown">
-                    {optionsJSX}
-                </div>
-            </div>
-        )
-    }
 
 
-    
-    const statusTypeRender = (currentIssueType) => {
-
-        const handleOptionClick = (e, type) => {
-            setCurrentStatusType(type)
-            setShowStatusPicker(false)
-        }
-        const statusTypes = [
-            "backlog",
-            "in progress",
-            "selected for development",
-            "done"
-        ]
-        
-        const options = statusTypes.filter(type => type !== currentStatusType)
-        const optionsJSX = options.map(type => {
-            return (
-                <div className="option" onClick={(e) => handleOptionClick(e, type)}>
-                    <div className="status-type-text" data-status-type={type}>{type}</div>
-                </div>
-            )
-        })
-
-        return (
-            <div>
-                <div className="current-type" onClick={e => setShowStatusPicker(true)}>
-                    <div className="status-type-text" data-status-type={currentStatusType}>{currentStatusType} ˅</div>
-                </div>
-                <div className="dropdown">
-                    {optionsJSX}
-                </div>
-            </div>
-        )
-    }
-
-
-    
-    const priorityTypeRender = (currentIssueType) => {
-
-        const handleOptionClick = (e, type) => {
-            setCurrentPriorityType(type)
-            setShowPriorityPicker(false)
-        }
-        const priorityTypes = {
-            "Highest": faArrowUp ,
-            "High": faArrowUp,
-            "Medium": faArrowUp ,
-            "Low": faArrowDown ,
-            "Lowest": faArrowDown 
+        const updateDropdownVisibility = (updatedBoolean) => {
+            switch (dataType) {
+                case "issueType":
+                    setShowIssuePicker(updatedBoolean)
+                    break;
+                case "issueStatus":
+                    setShowStatusPicker(updatedBoolean)
+                    break;
+                case "issuePriority":
+                    setShowPriorityPicker(updatedBoolean)
+                    break;
+                case "issueReportingUser":
+                    setShowReportingUserPicker(updatedBoolean)
+                    break;
+                case "issueAssignedUsers":
+                    setShowAssignedUserPicker(updatedBoolean)
+                    break;
+            }
         }
 
-        const options = Object.keys(priorityTypes).filter(type => type !== currentPriorityType)
-        const optionsJSX = options.map(type => {
-            return (
-                <div className="option" onClick={(e) => handleOptionClick(e, type)}>
-                    <div className="priority-type-icon-box">
-                        <FontAwesomeIcon icon={priorityTypes[type]} data-priority-type={type}/>
-                        <div className="priority-type-text" >{type}</div>
-                    </div>
-                </div>
-            )
-        })
-
-        return (
-            <div>
-                <div className="current-type" onClick={e => setShowPriorityPicker(true)}>
-                    <div className="priority-type-icon-box">
-                        <FontAwesomeIcon icon={priorityTypes[currentPriorityType]} data-priority-type={currentPriorityType}/>
-                        <div className="priority-type-text" >{currentPriorityType} ˅</div>
-                    </div>
-                </div>
-                <div className="dropdown">
-                    {optionsJSX}
-                </div>
-            </div>
-        )
-    }
-
-    
-    const reportingUserRender = (currentReportingUser) => {
-
-        const handleOptionClick = (e, user) => {
-            setCurrentReportingUser(user)
-            setShowReportingUserPicker(false)
-        }
-        const users = [
-            { username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" },
-            { username: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" },
-            { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }
-        ]
-
-        const options = users.filter(user => user.username !== currentReportingUser.username)
-        const optionsJSX = options.map(user => {
-            return (
-                <div className="option" onClick={(e) => handleOptionClick(e, user)}>
-                    <div className="reporting-user-avatar-box">
-                        <SmallAvatar image={user.avatar} />
-                        <div className="reporting-user-name" >{user.username}</div>
-                    </div>
-                </div>
-            )
-        })
-
-        return (
-            <div>
-                <div className="current-reporting-user" onClick={e => setShowReportingUserPicker(true)}>
-                    <div className="reporting-user-avatar-box">
-                        <SmallAvatar image={currentReportingUser.avatar}/>
-                        <div className="reporting-user-name" >{currentReportingUser.username}</div>
-                    </div>
-                </div>
-                <div className="dropdown">
-                    {optionsJSX}
-                </div>
-            </div>
-        )
-    }
-    
-
-    
-    const assignedUserRender = (currentAssignedUsers) => {
-
-        const handleOptionClick = (e, user) => {
-            setCurrentAssignedUsers([...currentAssignedUsers, user])
-            setShowAssignedUserPicker(false)
+        const handleOptionClick = (e, changedValue, dataType) => {
+            updateCard(changedValue, dataType)
+            updateDropdownVisibility(false)
         }
 
-        const handleRemoveUserClick = (e, removeUser) => {
-            console.log(removeUser);
+        const getOptionsFor = (dataType) => {
+            const options = {
+                issueType: [
+                    { name: "Task" },
+                    { name: "Bug" },
+                    { name: "Story" }
+                ],
             
-            const copiedCurrentAssignedUsers = [...currentAssignedUsers];
-            const newCurrentUsersList = copiedCurrentAssignedUsers.filter((currentUser) => currentUser.username !== removeUser.username)
-            setCurrentAssignedUsers(newCurrentUsersList)
+                issueStatus: [
+                    { name: "backlog" },
+                    { name: "in progress" },
+                    { name: "selected for development" },
+                    { name: "done" }
+                ],
+
+                issuePriority: [
+                    { name: "Highest" },
+                    { name: "High" },
+                    { name: "Medium" },
+                    { name: "Low" },
+                    { name: "Lowest" }
+                ],
+
+                issueAssignedUsers: props.allUsers,
+
+                issueReportingUser: props.allUsers
+            }
+
+            return options[dataType]
         }
 
-        const users = [
-            { username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg", id: uuid() },
-            { username: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg", id: uuid() },
-            { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg", id: uuid() }
-        ]
+        
+        
+        const renderIndividualOptionJSX = (optionData, dataType) => {
+            switch(dataType) {
+                case "issueType": 
+                    const issueTypeIcons = { 
+                        Task: faCheckSquare,
+                        Bug: faExclamationCircle,
+                        Story: faBookmark 
+                    }
+                    return (
+                        <div className="option" onClick={(e) => handleOptionClick(e, optionData.name, dataType)}>
+                            <FontAwesomeIcon icon={issueTypeIcons[optionData.name]} />
+                            <div className="issue-type-text">{optionData.name}</div>
+                        </div>
+                    )
 
-        const options = users.filter(user => {
-            const currentAssignedUsernames = currentAssignedUsers.map(currentUser => currentUser.username)
-            return !(currentAssignedUsernames.includes(user.username))
+                case "issueStatus":
+                    return (
+                        <div className="option" onClick={(e) => handleOptionClick(e, optionData.name, dataType)}>
+                            <div className="status-type-text" data-status-type={optionData.name}>{optionData.name}</div>
+                        </div>
+                    )
+
+                case "issuePriority":
+                    const priorityTypeIcons = {
+                        "Highest": faArrowUp,
+                        "High": faArrowUp,
+                        "Medium": faArrowUp,
+                        "Low": faArrowDown,
+                        "Lowest": faArrowDown
+                    }
+                    return (
+                        <div className="option" onClick={(e) => handleOptionClick(e, optionData.name, dataType)}>
+                            <div className="priority-type-icon-box">
+                                <FontAwesomeIcon icon={priorityTypeIcons[optionData.name]} data-priority-type={optionData.name} />
+                                <div className="priority-type-text" >{optionData.name}</div>
+                            </div>
+                        </div>
+                    )
+
+                case "issueReportingUser":
+                    return (
+                        <div className="option" onClick={(e) => handleOptionClick(e, optionData.name, dataType)}>
+                            <div className="reporting-user-avatar-box">
+                                <SmallAvatar image={getUserAvatar(optionData.name)} />
+                                <div className="reporting-user-name" >{optionData.name}</div>
+                            </div>
+                        </div>
+                    )
+            }
+        }
+
+
+        const getFilterMethod = (dataType) => {
+            switch (dataType) {
+                case "issueType":
+                    return type => type.name !== props.card[dataType].name
+                case "issueStatus":
+                    return type => type.name !== props.card[dataType].name
+                case "issuePriority":
+                    return type => type.name !== props.card[dataType].name
+                case "issueReportingUser":
+                    return type => type.name !== props.card[dataType].name
+
+                default: 
+                    return type => type
+            
+            }
+        }
+
+        const renderOptionsJSX = (dataType) => {
+            const allOptions = getOptionsFor(dataType)
+            const filterMethod = getFilterMethod(dataType)
+            const options = allOptions.filter(filterMethod)
+            const optionsJSX = options.map(type => renderIndividualOptionJSX(type, dataType))
+            return optionsJSX
+        }
+
+        const renderCurrentSelectionJSX = (dataType) => {
+            switch (dataType) {
+                case "issueType":
+                    const issueTypeIcons = {
+                        Task: faCheckSquare,
+                        Bug: faExclamationCircle,
+                        Story: faBookmark
+                    } 
+                    return (
+                        <div className="current-type" onClick={e => setShowIssuePicker(true)}>
+                            <FontAwesomeIcon icon={issueTypeIcons[props.card[dataType].name]} />
+                            <div className="issue-type-text">{props.card[dataType].name}</div>
+                        </div>
+                    )
+
+                case "issueStatus":
+                    return (
+                        <div className="current-type" onClick={e => updateDropdownVisibility(true)}>
+                            <div className="status-type-text" data-status-type={props.card[dataType].name}>{props.card[dataType].name} ˅</div>
+                        </div>
+                    )
+
+                case "issuePriority":
+                    const priorityTypeIcons = {
+                        "Highest": faArrowUp,
+                        "High": faArrowUp,
+                        "Medium": faArrowUp,
+                        "Low": faArrowDown,
+                        "Lowest": faArrowDown
+                    }
+                    return (
+                        <div className="current-type" onClick={e => updateDropdownVisibility(true)}>
+                            <div className="priority-type-icon-box">
+                                <FontAwesomeIcon icon={priorityTypeIcons[props.card[dataType].name]} data-priority-type={props.card[dataType].name} />
+                                <div className="priority-type-text" >{props.card[dataType].name} ˅</div>
+                            </div>
+                        </div>
+                    )
+
+                case "issueReportingUser":
+                    return (
+                        <div className="current-reporting-user" onClick={e => updateDropdownVisibility(true)}>
+                            <div className="reporting-user-avatar-box">
+                                <SmallAvatar image={getUserAvatar(props.card[dataType].name)} />
+                                <div className="reporting-user-name" >{props.card[dataType].name}</div>
+                            </div>
+                        </div>
+                    )       
+            }
+        }
+
+       
+
+        const renderFullDropdown = (dataType) => {
+            return (
+                <div className={dataType}>
+                    {renderCurrentSelectionJSX(dataType)}
+                    <div className="dropdown">
+                        {renderOptionsJSX(dataType)}
+                    </div>
+                </div>
+            )
+        }
+
+        const fullDropdownMenu = renderFullDropdown(dataType)
+        return fullDropdownMenu
+    }
+
+
+    
+
+    
+    const assignedUserRender = () => {
+
+        const handleOptionClick = (e, userNameToAdd) => {
+            let newCard = Object.assign({}, props.card)
+            newCard["issueAssignedUsers"].names = [...props.card.issueAssignedUsers.names, userNameToAdd]
+            props.setCard(newCard)
+            setShowAssignedUserPicker(false)
+        } 
+
+        const handleRemoveUserClick = (e, userNameToRemove) => {
+            let newCard = Object.assign({}, props.card)
+            const copiedIssueAssignedUsers = [...newCard.issueAssignedUsers.names];
+            const newIssueAssignedUsers = copiedIssueAssignedUsers.filter((userName) => userName !== userNameToRemove)
+            newCard["issueAssignedUsers"].names = newIssueAssignedUsers
+            props.setCard(newCard)
+        }
+
+
+        const options = props.allUsers.filter(user => {
+            console.log("1", props.card.issueAssignedUsers);
+            
+            const currentlyAssignedUserNames = props.card.issueAssignedUsers.map(user => user.name)
+            return !(currentlyAssignedUserNames.includes(user.name))
         })
+
         const optionsJSX = options.map(user => {
             return (
-                <div className="option" onClick={(e) => handleOptionClick(e, user)}>
+                <div className="option" onClick={(e) => handleOptionClick(e, user.name)}>
                     <div className="reporting-user-avatar-box">
                         <SmallAvatar image={user.avatar} />
-                        <div className="reporting-user-name" >{user.username}</div>
+                        <div className="reporting-user-name" >{user.name}</div>
                     </div>
                 </div>
             )
         })
 
-        const currentAssignedUsersJSX = currentAssignedUsers.map(user => {
+        const currentAssignedUsersJSX = props.card.issueAssignedUsers.map(user => {
             return (
                 <div className="current-assigned-user">
                     <div className="assigned-user-avatar-box">
-                        <SmallAvatar image={user.avatar} />
-                        <div className="assigned-user-name" >{user.username}</div>
-                        <div className="remove-assigned-user-btn" onClick={(e) => handleRemoveUserClick(e, user)}>X</div>
+                        <SmallAvatar image={getUserAvatar(user.name)} />
+                        <div className="assigned-user-name" >{user.name}</div>
+                        <div className="remove-assigned-user-btn" onClick={(e) => handleRemoveUserClick(e, user.name)}>X</div>
                     </div>
                 </div>
             )
         })
 
         return (
-            <div>a
+            <div>
                 {currentAssignedUsersJSX}
                 <div className="add-assigned-user-button" onClick={e => setShowAssignedUserPicker(true)}>Add more +</div>
                 <div className="dropdown">
@@ -818,7 +887,7 @@ const Modal = (props) => {
     }
 
 
-    const commentsContentRender = commentsText.map((comment) => {
+    const commentsContentRender = props.card.issueComments.map((comment) => {
         return (
             <div>
                 <div className="avatar-icon-box">
@@ -827,7 +896,7 @@ const Modal = (props) => {
                 </div>
                 <div className="comment-content">
                     <div className="comment-date">{comment.date}</div>
-                    <div className="comment-text">{comment.content}</div>
+                    <div className="comment-text">{comment.text}</div>
                     <div className="edit-btn">Edit</div>
                     <div className="delete-btn">Delete</div>
                 </div>
@@ -852,20 +921,20 @@ const Modal = (props) => {
                             showIssuePicker={showIssuePicker} 
                             ref={issuePicker} 
                         >
-                            {issueTypeRender(currentIssueType)}
+                            {renderDropdownMenu("issueType")}
                         </IssueTypePicker>
                         <IssueTitleInput>
                             <TextareaAutosize 
                                 key="input" 
                                 
-                                value={title.value} 
+                                value={props.card.issueTitle.value} 
                                 onChange={handleTitleChange}
                             />
                         </IssueTitleInput>
-                            <IssueDescription show={showDescriptionTextEditor}>Description
+                        <IssueDescription show={showDescriptionTextEditor}>Description
                             <ReactQuill 
                                 theme="snow" 
-                                value={value} 
+                                value={props.card.issueDescription.value} 
                                 onChange={setValue}
                                 onFocus={() => setShowDescriptionTextEditor(true)}
                                 modules={quillConfig.modules}
@@ -899,7 +968,7 @@ const Modal = (props) => {
                             ref={statusPicker}
                         >
                             <div className="status-type-picker-title">Status:</div>
-                            {statusTypeRender(currentStatusType)}
+                            {renderDropdownMenu("issueStatus")}
                         </StatusTypePicker>
 
                         <AssignedUsersPicker
@@ -915,7 +984,7 @@ const Modal = (props) => {
                             ref={reportingUserPicker}
                         >
                             <div className="reporting-user-picker-title">Reporter:</div>
-                            {reportingUserRender(currentReportingUser)}
+                            {renderDropdownMenu("issueReportingUser")}
                         </ReportingUserPicker>
 
                         <PriorityTypePicker
@@ -923,14 +992,13 @@ const Modal = (props) => {
                             ref={priorityPicker}
                         >
                             <div className="priority-type-picker-title">Priority:</div>
-                            {priorityTypeRender(currentPriorityType)}
+                            {renderDropdownMenu("issuePriority")}
                         </PriorityTypePicker>
-                        <div className="priority">Priority: High</div>
                         <OriginalEstimate>
                             <div className="original-estimate-text">Original Estimate (hours):</div> 
-                            <input value={estimatedTime} onChange={e => setEstimatedTime(e.target.value)}></input>
+                            <input value={props.card.issueEstimatedTime.value} onChange={e => updateCard({ value: e.target.value }, "issueEstimatedTime")}></input>
                         </OriginalEstimate>
-                        <TimeTracking logged={1} estimated={estimatedTime}>
+                        <TimeTracking logged={1} estimated={props.card.issueEstimatedTime.value}>
                             <FontAwesomeIcon icon={faStopwatch} />
                             <div className="progress-bar-grey">
                                 <div className="progress-bar-blue"></div>

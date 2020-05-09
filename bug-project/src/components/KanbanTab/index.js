@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuid } from 'uuid';
-import Modal from '../Modal';
+import Modal from '../Modals/IssueDisplay';
+import axios from 'axios';
 
 // fake data generator
 const getItems = count =>
@@ -37,50 +38,118 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 const KanbanTab = () => {
 
 
+    
 
-    const columnsFromBackend = {
-        [uuid()]: {
+    
+    const [allUsers, setAllUsers] = useState([{ username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }])
+    const [columnIds, setColumnIds] = useState({
+        "Backlog": [uuid()],
+        "Selected for Development": [uuid()],
+        "Done": [uuid()],
+        "In Progress": [uuid()]
+    })
+    const [columns, setColumns] = useState({
+        [columnIds["Backlog"]]: {
             name: "Backlog",
             issues: [
                 {
                     id: uuid(),
                     card: {
-                        currentIssueType: "Bug",
-                        title: { value: "Each issue has a single reporter but can have multiple assignees." },
-                        value: 'Try assigning Pickle Rick to this issue. 🥒 🥒 🥒',
-                        commentsText: [{ user: { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, date: "3 days ago", text: "In the moonlight, The color and scent of the wisteria Seems far away." }],
-                        estimatedTime: 6,
-                        currentStatusType: "backlog",
-                        currentPriorityType: "High",
-                        currentReportingUser: { username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" },
-                        currentAssignedUsers: [{ username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }]
+                        issueType: { name: "Bug" },
+                        issueTitle: { value: "Finish modal structure, so it looks right." },
+                        issueDescription: { value: 'Try assigning Pickle Rick to this issue. 🥒 🥒 🥒' },
+                        issueComments: [{ user: { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, date: "3 days ago", text: "In the moonlight, The color and scent of the wisteria Seems far away." }],
+                        issueEstimatedTime: {value: 6},
+                        issueStatus: {name: "backlog"},
+                        issuePriority: { name: "High" },
+                        issueReportingUser: { name: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" },
+                        issueAssignedUsers: [{ name: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { name: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }]
                     }
-                }, 
+                },
+
+                {
+                    id: uuid(),
+                    card: {
+                        issueType: { name: "Bug" },
+                        issueTitle: { value: "Set up cancel buttons, so they actually close the mini-modal." },
+                        issueDescription: { value: 'Try assigning Pickle Rick to this issue. 🥒 🥒 🥒' },
+                        issueComments: [{ user: { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, date: "3 days ago", text: "In the moonlight, The color and scent of the wisteria Seems far away." }],
+                        issueEstimatedTime: { value: 6 },
+                        issueStatus: { name: "backlog" },
+                        issuePriority: { name: "High" },
+                        issueReportingUser: { name: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" },
+                        issueAssignedUsers: [{ name: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { name: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }]
+                    }
+                },
+
+                {
+                    id: uuid(),
+                    card: {
+                        issueType: { name: "Bug" },
+                        issueTitle: { value: "Fix hours entry button, so it can be changed." },
+                        issueDescription: { value: 'Try assigning Pickle Rick to this issue. 🥒 🥒 🥒' },
+                        issueComments: [{ user: { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, date: "3 days ago", text: "In the moonlight, The color and scent of the wisteria Seems far away." }],
+                        issueEstimatedTime: { value: 6 },
+                        issueStatus: { name: "backlog" },
+                        issuePriority: { name: "High" },
+                        issueReportingUser: { name: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" },
+                        issueAssignedUsers: [{ name: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { name: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }]
+                    }
+                },
+                 
+                {
+                    id: uuid(),
+                    card: {
+                        issueType: { name: "Bug" },
+                        issueTitle: { value: "Set data so that it uses the backend instead of front." },
+                        issueDescription: { value: 'Try assigning Pickle Rick to this issue. 🥒 🥒 🥒' },
+                        issueComments: [{ user: { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, date: "3 days ago", text: "In the moonlight, The color and scent of the wisteria Seems far away." }],
+                        issueEstimatedTime: { value: 6 },
+                        issueStatus: { name: "backlog" },
+                        issuePriority: { name: "High" },
+                        issueReportingUser: { name: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" },
+                        issueAssignedUsers: [{ name: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { name: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }]
+                    }
+                },
                 
             ]
         },
-        [uuid()]: {
+        [columnIds["Selected for Development"]]: {
             name: "Selected for Development",
             issues: []
         },
-        [uuid()]: {
+        [columnIds["In Progress"]]: {
             name: "In Progress",
             issues: []
         },
-        [uuid()]: {
+        [columnIds["Done"]]: {
             name: "Done",
             issues: []
         }
 
-    }
+    })
 
 
-    // { id: uuid(), content: "Hook up frontend and backend, so that chart is populated by a backend server" } { id: uuid(), content: "Hook up all data so it goes through from kanbantab page object to Modal Object" }, { id: uuid(), content: "Clean up functions and components into their own separate components" }
-
+    useEffect(() => {
+        axios.get('http://localhost:3050/api/issues')
+            .then((response) => {
+                const columnsCopy = Object.assign({}, columns)
+                response.data.forEach((issue) => {
+                    const columnId = columnIds[issue.issueStatus]
+                    const issueObject = {
+                        id: uuid(),
+                        card: issue
+                    }
+                    columnsCopy[columnId].issues.push(issueObject)
+                })
+                console.log(columnsCopy);
+                setColumns(columnsCopy)
+            })
+    }, [])
+    
     const [modalIsOpen, setModalIsOpen] = useState(false)
 
     const [items, setItems] = useState(getItems(10))
-    const [columns, setColumns] = useState(columnsFromBackend)
     const onDragEnd = (result, columns, setColumns) => {
         // dropped outside the list
         if (!result.destination) {
@@ -92,32 +161,32 @@ const KanbanTab = () => {
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = columns[source.droppableId];
             const destColumn = columns[destination.droppableId];
-            const sourceItems = [...sourceColumn.items];
-            const destItems = [...destColumn.items];
-            const [removed] = sourceItems.splice(source.index, 1);
-            destItems.splice(destination.index, 0, removed);
+            const sourceIssues = [...sourceColumn.issues];
+            const destIssues = [...destColumn.issues];
+            const [removed] = sourceIssues.splice(source.index, 1);
+            destIssues.splice(destination.index, 0, removed);
             setColumns({
                 ...columns,
                 [source.droppableId]: {
                     ...sourceColumn,
-                    items: sourceItems
+                    issues: sourceIssues
                 },
                 [destination.droppableId]: {
                     ...destColumn,
-                    items: destItems
+                    issues: destIssues
                 }
             })
         } else {
             const column = columns[source.droppableId];
-            const copiedItems = [...column.items];
-            const [removed] = copiedItems.splice(source.index, 1);
-            copiedItems.splice(destination.index, 0, removed);
+            const copiedIssues = [...column.issues];
+            const [removed] = copiedIssues.splice(source.index, 1);
+            copiedIssues.splice(destination.index, 0, removed);
 
             setColumns({
                 ...columns,
                 [source.droppableId]: {
                     ...column,
-                    items: copiedItems
+                    issues: copiedIssues
                 }
             })
         }
@@ -125,18 +194,18 @@ const KanbanTab = () => {
     }
     
     const [currentModalCard, setCurrentModalCard] = useState({
-        currentIssueType: "",
-        title: { value: "" },
-        value: '',
-        commentsText: [{ user: { username: "", avatar: "" }, date: "", text: "" }],
-        estimatedTime: 0,
-        currentStatusType: "",
-        currentPriorityType: "",
-        currentReportingUser: { username: "", avatar: "" },
-        currentAssignedUsers: [{ username: "", avatar: "" }]
+        issueType: { name: "" },
+        issueTitle: { value: "" },
+        issueDescription: { value: '' },
+        issueComments: [{ user: { username: "", avatar: "" }, date: "", text: "" }],
+        issueEstimatedTime: {value: 0},
+        issueStatus: { name: "" },
+        issuePriority: {name: ""},
+        issueReportingUser: { name: "", avatar: "" },
+        issueAssignedUsers: [{ name: "", avatar: "" }]
     })
 
-    const handleIssueClick = (e, column, issue) => {
+    const handleIssueClick = (e, issue) => {
         setModalIsOpen(true)
         setCurrentModalCard(issue.card)
     }
@@ -148,6 +217,8 @@ const KanbanTab = () => {
         <div className="column" style={{display: "flex", width: "100%"}}>
             <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
                 {Object.entries(columns).map(([id, column]) => {
+                    console.log(column);
+                    
                     return (
                         <div style={{width: "25%", margin: "0px 5px"}}>
                             <h4>{column.name}</h4>
@@ -162,7 +233,7 @@ const KanbanTab = () => {
                                             <Draggable key={issue.id} draggableId={issue.id} index={index}>
                                                 {(provided, snapshot) => (
                                                     <div
-                                                        onClick={e => handleIssueClick(e, column, issue)}
+                                                        onClick={e => handleIssueClick(e, issue)}
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
@@ -171,7 +242,7 @@ const KanbanTab = () => {
                                                             provided.draggableProps.style
                                                         )}
                                                     >
-                                                        {issue.card.title.value}
+                                                        {issue.card.issueTitle.value}
                                                     </div>
                                                 )}
                                             </Draggable>
@@ -186,7 +257,12 @@ const KanbanTab = () => {
                 })}
             </DragDropContext>
         </div>
-        <Modal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} card={currentModalCard}></Modal>
+        <Modal 
+        modalIsOpen={modalIsOpen} 
+        setModalIsOpen={setModalIsOpen} 
+        card={currentModalCard} 
+        setCard={setCurrentModalCard}
+        allUsers={allUsers}></Modal>
         
     </div>
       

@@ -5,14 +5,16 @@ import axios from 'axios'
 import Routes from './components/Routes'
 import appAvatar from './icons8-stack-48.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChalkboard, faSlidersH } from '@fortawesome/free-solid-svg-icons';
-
+import { faChalkboard, faSlidersH, faSearch, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import CreateIssueModal from "./components/Modals/CreateIssueModal"
 
 const App = () => {
 
   const [users, setUsers] = useState([])
   const [projects, setProjects] = useState([])
   const [issues, setIssues] = useState([])
+  //To eventually be replaced, when you get the backend set up properly
+  const [allUsers, setAllUsers] = useState([{ username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }])
 
   useEffect(() => {
     axios.get('http://localhost:3050/api/users')
@@ -45,6 +47,9 @@ const App = () => {
     padding-top: 20px;
   `;
 
+
+
+
   const Sidenav = styled.aside`
     height: 100vh;
     width: 40px;
@@ -60,6 +65,25 @@ const App = () => {
     &:hover {
       width: 110px;
     }
+  `;
+
+
+
+  const SidenavIcon = styled.div`
+  width: 100%;
+  line-height: 100%;
+  padding: 10px;
+  position: inline-block;
+
+  & svg {
+    color: white;
+  }
+  `;
+
+
+  const SidenavIconText = styled.div `
+    color: white;
+    position: relative;
   `;
 
   const LinkList = styled.div`
@@ -103,35 +127,76 @@ const App = () => {
   `;
 
 
+
+
+
+// const ModalBox = styled.div`
+//   background-color: #fefefe;
+//   margin: 8% auto;
+//   padding: 15px;
+//   border: 1px solid #888;
+//   width: 55%;
+//   height: 65%;
+//   font-size: 12px;
+//   `; 
+
   
   // login={login} loginCallback={loginCallback}
 
+
+  const [createIssueModalIsOpen, setCreateIssueModalIsOpen] = useState(false)
+
+
   return (
     <div>
-      <Sidenav>
 
-      </Sidenav>
-      <Sidebar>
-        <ProjectBar>
-          <ProjectIcon><img src={appAvatar}></img></ProjectIcon>
-          <ProjectInfo>
-            <ProjectName>FullStack 2.1</ProjectName>
-            <ProjectBlurb>Software Project</ProjectBlurb>
-          </ProjectInfo>
-        </ProjectBar>
-        <LinkList>
-          {renderLinkItem('Kanban Board', faChalkboard, '/board')}
-          {renderLinkItem('Project Settings', faSlidersH, '/settings')}
-          <Divider/>
-          {renderLinkItem('Home', faChalkboard, '/home')}
-          {renderLinkItem('Users', faChalkboard, '/users')}
-          {renderLinkItem('Projects', faChalkboard, '/projects')}
-        </LinkList>
-      </Sidebar>
-      <Content>
-        <Routes users={users} issues={issues} projects={projects} />
-        
-      </Content> 
+        <Sidenav>
+          <SidenavIcon>
+            <FontAwesomeIcon 
+              icon={faPlusSquare}
+              size="lg"
+            />
+            <SidenavIconText>
+              Search Issue
+            </SidenavIconText>
+          </SidenavIcon>
+          <SidenavIcon>
+            <FontAwesomeIcon 
+              icon={faSearch}
+              size="lg"
+              onClick={() => setCreateIssueModalIsOpen(true)}
+            />
+            <SidenavIconText>
+              Create Issue
+            </SidenavIconText>
+          </SidenavIcon>
+        </Sidenav>
+        <Sidebar>
+          <ProjectBar>
+            <ProjectIcon><img src={appAvatar}></img></ProjectIcon>
+            <ProjectInfo>
+              <ProjectName>FullStack 2.1</ProjectName>
+              <ProjectBlurb>Software Project</ProjectBlurb>
+            </ProjectInfo>
+          </ProjectBar>
+          <LinkList>
+            {renderLinkItem('Kanban Board', faChalkboard, '/board')}
+            {renderLinkItem('Project Settings', faSlidersH, '/settings')}
+            <Divider/>
+            {renderLinkItem('Home', faChalkboard, '/home')}
+            {renderLinkItem('Users', faChalkboard, '/users')}
+            {renderLinkItem('Projects', faChalkboard, '/projects')}
+          </LinkList>
+        </Sidebar>
+        <Content>
+          <Routes users={users} issues={issues} projects={projects} />
+      <CreateIssueModal 
+      modalIsOpen={createIssueModalIsOpen}
+      setModalIsOpen={setCreateIssueModalIsOpen}
+      allUsers={allUsers}
+      /> 
+          
+        </Content> 
     </div>
   )
 }

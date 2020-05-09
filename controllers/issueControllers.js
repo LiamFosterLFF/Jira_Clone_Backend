@@ -1,28 +1,50 @@
 const Issue = require('../models/Issue')
 const Project = require('../models/Project')
+const User = require('../models/User')
 
 module.exports = {
-
   createIssue(req, res) {
-    const issueProps = req.body;
-    Project.findById(req.body.project)
+    console.log("a", req.body.users.issueReportingUser)
+    Project.findById(req.body.issueData.project)
     .then((project) => {
-      Issue.create(issueProps).then(issue =>{
-        project.issues.push(issue)
-        console.log(issue);
-        project.save()
-        res.send(issue)
+      Issue.create(req.body.issueData).then(issue =>{
+        console.log("Data", req.body);
+        
+        User.find({}, function(err, userDocs) {
+          userDocs.forEach(userDoc => {
+            if (userDoc.username === req.body.users.issueReportingUser.username) {
+              issue.issueReportingUser = userDoc
+            }
+            req.body.users.issueAssignedUsers.forEach(assignedUser => {
+              if (assignedUser.username === userDoc.username) {
+                issue.issueAssignedUsers.push(userDoc)
+              }
+            })
+            
+          })
+          issue.save()
         })
+        .then(() => {
+          project.issues.push(issue)
+          console.log(issue);
+          project.save()
+          res.send(issue)
+        })
+
       })
+    })
   },
 
   getIssues(req, res) {
-    Issue.find({}, function(err,issues) {res.send(issues)});
+    Issue.find({})
+      .populate({path: 'issueReportingUser'})
+      .populate({path: 'issueAssignedUsers'})
+      .then((issues) => res.send(issues))
   },
 
   getSingleIssue(req, res) {
     Issue.findById(req.params.id, function(err,issue) {res.send(issue)});
-  },
+  }, 
 
   updateIssue(req, res, next) {
     Issue.findByIdAndUpdate(req.params.id, req.body)
