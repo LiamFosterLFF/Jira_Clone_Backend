@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { IssueTitleInput } from './styles'
 
@@ -9,9 +7,8 @@ import { IssueTitleInput } from './styles'
 
 const IssueTitle = (props) => {
     
-    
     const handleTitleChange = (e) => {
-        props.updateCard("issueTitle", {value: e.target.value})
+        props.updateCard("issueTitle", e.target.value)
     }
 
     

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -8,34 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChalkboard, faSlidersH, faSearch, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import CreateIssueModal from "./components/Modals/CreateIssueModal"
 
-const App = () => {
 
-  const [users, setUsers] = useState([])
-  const [projects, setProjects] = useState([])
-  const [issues, setIssues] = useState([])
-  //To eventually be replaced, when you get the backend set up properly
-  const [allUsers, setAllUsers] = useState([{ username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }])
-
-  useEffect(() => {
-    axios.get('http://localhost:3050/api/users')
-    .then((response) => {
-      setUsers(response.data)
-    })
-      .then(() => axios.get('http://localhost:3050/api/projects'))
-        .then((response) => {
-          setProjects(response.data)
-        })
-         .then(() => axios.get('http://localhost:3050/api/issues'))
-          .then((response) => {
-            setIssues(response.data)
-          })
-
-  }, [])
-
-  const segmentRef = useRef()
-  const [visible, setVisible] = useState(false)
-
-  const Sidebar = styled.div`
+const Sidebar = styled.div`
     height: 100%;
     width: 140px;
     position: fixed;
@@ -128,21 +102,29 @@ const App = () => {
 
 
 
+const App = () => {
 
+  const [users, setUsers] = useState([])
+  const [projects, setProjects] = useState([])
+  const [issues, setIssues] = useState([])
+  //To eventually be replaced, when you get the backend set up properly
+  const [allUsers] = useState([{ username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Pickle Rick", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Lord Gaben", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }])
 
-// const ModalBox = styled.div`
-//   background-color: #fefefe;
-//   margin: 8% auto;
-//   padding: 15px;
-//   border: 1px solid #888;
-//   width: 55%;
-//   height: 65%;
-//   font-size: 12px;
-//   `; 
+  useEffect(() => {
+    axios.get('http://localhost:3050/api/users')
+    .then((response) => {
+      setUsers(response.data)
+    })
+      .then(() => axios.get('http://localhost:3050/api/projects'))
+        .then((response) => {
+          setProjects(response.data)
+        })
+         .then(() => axios.get('http://localhost:3050/api/issues'))
+          .then((response) => {
+            setIssues(response.data)
+          })
 
-  
-  // login={login} loginCallback={loginCallback}
-
+  }, [])
 
   const [createIssueModalIsOpen, setCreateIssueModalIsOpen] = useState(false)
 
@@ -173,7 +155,7 @@ const App = () => {
         </Sidenav>
         <Sidebar>
           <ProjectBar>
-            <ProjectIcon><img src={appAvatar}></img></ProjectIcon>
+            <ProjectIcon><img src={appAvatar} alt={"App Avatar"}></img></ProjectIcon>
             <ProjectInfo>
               <ProjectName>FullStack 2.1</ProjectName>
               <ProjectBlurb>Software Project</ProjectBlurb>
@@ -201,32 +183,35 @@ const App = () => {
   )
 }
 
+
+const LinkItem = styled.div`
+font-size: 11px;
+padding: 8px 12px;
+cursor: pointer;
+border-radius: 3px;
+display: flex;
+position: relative;
+`;
+
+const LinkIcon = styled.div`
+margin-right: 10px;
+width: 15px;
+`;
+
+const LinkText = styled.div`
+a {
+  text-decoration: none;
+  color: black;
+}
+`;
+
 const renderLinkItem = (name, icon, path) => {
   // const iconDictionary = {
 
 
   // };
 
-  const LinkItem = styled.div`
-    font-size: 11px;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 3px;
-    display: flex;
-    position: relative;
-  `;
 
-  const LinkIcon = styled.div`
-    margin-right: 10px;
-    width: 15px;
-  `;
-
-  const LinkText = styled.div`
-    a {
-      text-decoration: none;
-      color: black;
-    }
-  `;
 
   return (
     <LinkItem>
@@ -244,60 +229,3 @@ const renderLinkItem = (name, icon, path) => {
 
 
 export default App;
-
-
-
-
-
-//
-// users = [
-//   {
-//     username: 'Joe',
-//     firstname: 'Joe',
-//     lastname: 'Malma',
-//     password: '123',
-//     admin: true
-//   },
-//   {
-//     username: 'User',
-//     firstname: 'You',
-//     lastname: 'Sir',
-//     password: '123',
-//     admin: false
-//   }
-// ]
-//
-//
-//  projects = [
-//   {
-//     title: 'project 1',
-//     type: '1',
-//     abbreviation: 'p1',
-//     description: 'is a project'
-//   },
-//   {
-//     title: 'project 2',
-//     type: '2',
-//     abbreviation: 'p2',
-//     description: 'is also a project'
-//   }
-// ]
-//
-//  issues = [
-//   {
-//     summary: 'is broken',
-//     description: 'just broke yo',
-//     type: 'issue',
-//     priority: 'LOW',
-//     assignee: 'Liam Foster'
-//   },
-//   {
-//     summary: 'is still broken',
-//     description: 'just super broke yo',
-//     type: 'issue',
-//     priority: 'MEDIUM'    }
-// ]
-
-// axios.post('http://localhost:3050/api/users', users)
-// .then(() => axios.post('http://localhost:3050/api/projects', projects))
-// .then(() => axios.post('http://localhost:3050/api/issues', issues))

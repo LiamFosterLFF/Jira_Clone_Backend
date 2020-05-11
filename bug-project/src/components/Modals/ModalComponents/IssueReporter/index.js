@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IssueReporterDropdown } from './styles'
-
+import OutsideClickHandler from 'react-outside-click-handler'
+import { v4 as uuid } from 'uuid';
 
 
 const SmallAvatar = styled.div`
@@ -43,7 +43,7 @@ const IssueReporter = (props) => {
 
     const IndividualOption = ({user}) => {
         return (
-            <div className="option" onClick={(e) => handleOptionClick(user)}>
+            <div key={uuid()} className="option" onClick={(e) => handleOptionClick(user)}>
                 <div className="reporting-user-avatar-box">
                     <SmallAvatar image={user.avatar} />
                     <div className="reporting-user-name" >{user.username}</div>
@@ -54,22 +54,20 @@ const IssueReporter = (props) => {
 
 
     const Options = ({reportingUser}) => {
-        console.log(reportingUser);
-        
         const filteredOptionsArray = allOptions.filter(user => user.username !== reportingUser.username)
-        const optionsJSX = filteredOptionsArray.map(option => <IndividualOption user={option}/>)
+        const optionsJSX = filteredOptionsArray.map(option => <IndividualOption key={uuid()} user={option}/>)
         return  <div className="dropdown"> {optionsJSX} </div>
     } 
 
     
 
     return (
-        <div>
+        <OutsideClickHandler onOutsideClick={() => setShowDropdown(false)}>
             <IssueReporterDropdown showDropdown={showDropdown} className="issue-reporter">
                 <CurrentSelection reportingUser={props.issueReporter} />
                 <Options reportingUser={props.issueReporter} />
             </IssueReporterDropdown>
-        </div>
+        </OutsideClickHandler>
 
     )
 }

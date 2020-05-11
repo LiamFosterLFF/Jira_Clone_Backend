@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { IssueDescriptionBox } from './styles'
 
 
-
 const IssueDescription = (props) => {
-    console.log(props);
-    
-    const [ showEditor, setShowEditor ] = useState(false)
+    const [description, setDescription] = useState(props.issueDescription)
+    const [showEditor, setShowEditor] = useState(false)
 
-    const handleDescriptionChange = value => {
-        props.updateCard("issueDescription", {"value": value})
+    const handleUpdate = () => {
+        props.updateCard("issueDescription", description)
+        setShowEditor(false)
     }
 
+    const handleCancel = () => {
+        setDescription(props.issueDescription)
+        setShowEditor(false)
+    }
+
+    useEffect(() => {
+        setDescription(props.issueDescription)
+        setShowEditor(false)
+    }, [props.modalIsOpen])
     
     const quillConfig = {
         modules: {
@@ -35,14 +41,14 @@ const IssueDescription = (props) => {
         <IssueDescriptionBox show={showEditor}>
             <ReactQuill 
                 theme="snow" 
-                value={props.issueDescription} 
-                onChange={handleDescriptionChange}
+                value={description} 
+                onChange={setDescription}
                 onFocus={() => setShowEditor(true)}
                 modules={quillConfig.modules}
                 formats={quillConfig.formats}
             />
-            <div className="save-button">Save</div>
-            <div className="cancel-button" onClick={() => setShowEditor(false)}>Cancel</div>
+            <div className="save-button" onClick={() => handleUpdate()}>Save</div>
+            <div className="cancel-button" onClick={() => handleCancel()}>Cancel</div>
         </IssueDescriptionBox>
     )
 }

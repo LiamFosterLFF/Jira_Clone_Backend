@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import { IssuePriorityDropdown } from './styles'
-
+import OutsideClickHandler from 'react-outside-click-handler';
+import { v4 as uuid } from 'uuid';
 
 
 const IssuePriority = (props) => {
     const [ showDropdown, setShowDropdown ] = useState(false)
-
 
     const allOptions = {
         "Highest": { icon: faArrowUp },
@@ -18,19 +17,13 @@ const IssuePriority = (props) => {
         "Lowest": { icon: faArrowDown }
     }
 
-
-
-
-
     const handleOptionClick = (priorityType) => {
-        props.updateCard("issuePriority", {name: priorityType})
+        props.updateCard("issuePriority", priorityType)
         setShowDropdown(false)
     }
 
-
     const CurrentSelection= ({priorityType}) => {
         return (
-
             <div className="current-type" onClick={e => setShowDropdown(true)}>
                 <div className="priority-type-icon-box">
                     <FontAwesomeIcon icon={allOptions[priorityType].icon} data-priority-type={priorityType} />
@@ -40,9 +33,7 @@ const IssuePriority = (props) => {
         )
     }
 
-
     const IndividualOption = ({priorityType}) => {
-
         return (
             <div className="option" onClick={() => handleOptionClick(priorityType)}>
                 <div className="priority-type-icon-box">
@@ -53,20 +44,19 @@ const IssuePriority = (props) => {
         )
     }
 
-
     const Options = ({priorityType}) => {
         const filteredOptionsArray = Object.keys(allOptions).filter(key => key !== priorityType)
-        const optionsJSX = filteredOptionsArray.map((option, icon) => <IndividualOption priorityType={option}/>)
+        const optionsJSX = filteredOptionsArray.map((option, icon) => <IndividualOption key={uuid()} priorityType={option}/>)
         return  <div className="dropdown"> {optionsJSX} </div>
     } 
 
     return (
-        <div>
+        <OutsideClickHandler onOutsideClick={() => setShowDropdown(false)}>
             <IssuePriorityDropdown showDropdown={showDropdown} className="issue-priority">
                 <CurrentSelection priorityType={props.priorityType} />
                 <Options priorityType={props.priorityType} />
             </IssuePriorityDropdown>
-        </div>
+        </OutsideClickHandler>
 
     )
 }

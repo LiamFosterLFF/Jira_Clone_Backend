@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IssueTypes from "./ModalComponents/IssueTypes"
 import IssuePriority from './ModalComponents/IssuePriority'
 import IssueAssignees from './ModalComponents/IssueAssignees';
@@ -18,12 +17,12 @@ const ModalContent = (props) => {
 
 
     const [ newCard, setNewCard ] = useState({
-        issueType: { name: 'Task' },
-        issueTitle: { value: "1" },
-        issueDescription: { value: "<p></p>" },
-        issueEstimatedTime: {value: 0},
-        issueStatus: {name: ""},
-        issuePriority: { name: "Medium" },
+        issueType: 'Task',
+        issueTitle: "1",
+        issueDescription: "<p></p>",
+        issueEstimatedTime: 0,
+        issueStatus: "",
+        issuePriority: "Medium",
         issueReportingUser: { username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" },
         issueAssignedUsers: [{ username: "Baby Yoda", avatar: "https://i.ibb.co/6n0hLML/baby-yoda.jpg" }, { username: "Pickle Rick", avatar: "https://i.ibb.co/7JM1P2r/picke-rick.jpg" }]
     })
@@ -31,18 +30,16 @@ const ModalContent = (props) => {
     const updateCard = (changedParameter, newValue) => {
         const updatedCard = Object.assign({}, newCard)
         updatedCard[changedParameter] = newValue
-        console.log(updatedCard);
-        
         setNewCard(updatedCard)
     }
 
     const submitIssue = () => {
         const createMongooseModelCard = {
             issueData: {
-                issueType: newCard.issueType.name,
-                issueTitle: newCard.issueTitle.value,
-                issueDescription: newCard.issueDescription.value,
-                issuePriority: newCard.issuePriority.name,
+                issueType: newCard.issueType,
+                issueTitle: newCard.issueTitle,
+                issueDescription: newCard.issueDescription,
+                issuePriority: newCard.issuePriority,
                 project: "5eb576c9fa57d3afd5516338",
                 issueStatus: "Backlog",
                 issueEstimatedTime: 0,
@@ -61,12 +58,12 @@ const ModalContent = (props) => {
     return (
         <Text>
             Create Issue
-            <IssueTypes issueType={newCard.issueType.name} updateCard={updateCard}/>
-            <IssueTitle issueTitle={newCard.issueTitle.value} updateCard={updateCard} />
-            <IssueDescription issueDescription={newCard.issueDescription.value} updateCard={updateCard} />
+            <IssueTypes issueType={newCard.issueType} updateCard={updateCard}/>
+            <IssueTitle issueTitle={newCard.issueTitle} updateCard={updateCard} />
+            <IssueDescription issueDescription={newCard.issueDescription} updateCard={updateCard} />
             <IssueReporter issueReporter={newCard.issueReportingUser} updateCard={updateCard} allUsers={props.allUsers}/> 
             <IssueAssignees assignedUsers={newCard.issueAssignedUsers} updateCard={updateCard} allUsers={props.allUsers}/>
-            <IssuePriority priorityType={newCard.issuePriority.name} updateCard={updateCard} />
+            <IssuePriority priorityType={newCard.issuePriority} updateCard={updateCard} />
             <div onClick={() => submitIssue()}>Create Issue</div>
         </Text>
     )

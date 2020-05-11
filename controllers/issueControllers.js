@@ -4,12 +4,9 @@ const User = require('../models/User')
 
 module.exports = {
   createIssue(req, res) {
-    console.log("a", req.body.users.issueReportingUser)
     Project.findById(req.body.issueData.project)
     .then((project) => {
       Issue.create(req.body.issueData).then(issue =>{
-        console.log("Data", req.body);
-        
         User.find({}, function(err, userDocs) {
           userDocs.forEach(userDoc => {
             if (userDoc.username === req.body.users.issueReportingUser.username) {
@@ -26,7 +23,6 @@ module.exports = {
         })
         .then(() => {
           project.issues.push(issue)
-          console.log(issue);
           project.save()
           res.send(issue)
         })

@@ -1,44 +1,38 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-
-export const IssuePriorityDropdown = styled.div`
+export const IssueStatusDropdown = styled.div`
     font-size: 10px;
+    text-transform: uppercase;
     letter-spacing: 0.5px;
     color: rgb(94, 108, 132);
     font-family: CircularStdBold;
-
-    .priority-type-icon-box svg {
-        &[data-priority-type="Highest"] {
-            color: darkred;
-        }
-        &[data-priority-type="High"] {
-            color: red;
-        }
-        &[data-priority-type="Medium"] {
-            color: orange;
-        }
-        &[data-priority-type="Low"] {
-            color: green;
-        }
-        &[data-priority-type="Lowest"] {
-            color: darkgreen;
-        }
-    }
-
-    .priority-type-text {
+    
+    .status-type-text {
         padding: 5px;
         display: inline-block;
         border-radius: 3px;
         margin: 2px;
-        
+        &[data-status-type="selected for development"] {
+            background-color: #EBECF0;
+            color: rgb(94, 108, 132);
+        }
+        &[data-status-type="in progress"] {
+            background-color: blue;
+            color: white;
+        }
+        &[data-status-type="backlog"] {
+            background-color: #EBECF0;
+            color: rgb(94, 108, 132);
+        }
+        &[data-status-type="done"] {
+            background-color: green;
+            color: white;
+        }
     }
 
     .current-type {
-        display: inline-block;
-        border-radius: 3px;
-        padding: 2px;
         &:hover {
-            background-color: #EBECF0;
+            transform: scale(1.04);
         }
     }
 

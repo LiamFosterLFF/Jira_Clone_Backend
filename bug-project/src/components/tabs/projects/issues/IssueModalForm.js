@@ -5,16 +5,7 @@ import axios from 'axios'
 // Fed into by Issues Modal
 const IssueModalForm = ({users, modalData, type}) => {
   // modalData comes from SingleProjectTab useState, in turn set by create or edit buttons
-  const assignees = [
-    {
-      name:"Liam Foster",
-      _id:"12345"
-    },
-    {
-      name:" User 2",
-      _id:"012345"
-    }
-  ]
+
 
   const [form, setForm] = useState({
     summary: "",

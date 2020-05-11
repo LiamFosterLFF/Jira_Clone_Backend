@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AssignedUserDropdown } from './styles'
+import { v4 as uuid } from 'uuid';
 
 const SmallAvatar = styled.div`
     background-image: url(${ props => props.image});
@@ -17,10 +17,6 @@ const SmallAvatar = styled.div`
 const IssueAssignees = (props) => {
     
     const [ showDropdown, setShowDropdown ] = useState(false)
-
-
-
-    const allOptions = props.allUsers
 
     const handleOptionClick = (userToAdd) => {
         const newAssignedUsers = [ ...props.assignedUsers, userToAdd]
@@ -38,7 +34,7 @@ const IssueAssignees = (props) => {
 
     const optionsJSX = options.map(user => {
         return (
-            <div className="option" onClick={(e) => handleOptionClick(user)}>
+            <div key={uuid()} className="option" onClick={(e) => handleOptionClick(user)}>
                 <div className="reporting-user-avatar-box">
                     <SmallAvatar image={user.avatar} />
                     <div className="reporting-user-name" >{user.username}</div>
@@ -49,7 +45,7 @@ const IssueAssignees = (props) => {
 
     const currentAssignedUsersJSX = props.assignedUsers.map(user => {
         return (
-            <div className="current-assigned-user">
+            <div key={uuid()} className="current-assigned-user">
                 <div className="assigned-user-avatar-box">
                     <SmallAvatar image={user.avatar} />
                     <div className="assigned-user-name" >{user.username}</div>
