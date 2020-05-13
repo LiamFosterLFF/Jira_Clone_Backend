@@ -36,7 +36,16 @@ const IssueSchema = new Schema({
   issueAssignedUsers: [{
     type: Schema.Types.ObjectId,
     ref: 'user'
-  }]
+  }],
+  columnIndex: {
+    type: Number,
+  },
+  dateCreated: {
+    type: Date
+  },
+  dateUpdated: {
+    type: Date
+  }
 })
 
 const Issue = mongoose.model('issue', IssueSchema);

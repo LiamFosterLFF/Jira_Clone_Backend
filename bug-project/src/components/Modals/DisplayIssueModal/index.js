@@ -8,7 +8,7 @@ import IssueAssignees from '../ModalComponents/IssueAssignees';
 import IssueReporter from '../ModalComponents/IssueReporter';
 import IssueTitle from '../ModalComponents/IssueTitle';
 import IssueDescription from '../ModalComponents/IssueDescription';
-import IssueStatus from '../ModalComponents/IssueStatus';
+import IssueStatus from '../ModalComponents/DisplayIssueComponents/IssueStatus';
 import IssueOriginalTimeEstimate from '../ModalComponents/IssueOriginalTimeEstimate';
 import IssueAddComments from '../ModalComponents/IssueAddComments';
 import { ModalBackdrop, ModalBox, ModalContent } from "./styles";
@@ -90,7 +90,7 @@ const DisplayIssueModal = (props) => {
                         <IssueAddComments issueComments={props.card.issueComments} updateCard={updateCard}/>
                     </div>
                     <div className="right-column">
-                        <IssueStatus issueStatus={props.card.issueStatus} updateCard={updateCard} />
+                        <IssueStatus issueStatus={props.card.issueStatus} updateCard={updateCard}/>
                         <IssueAssignees assignedUsers={props.card.issueAssignedUsers} updateCard={updateCard} allUsers={props.allUsers} />
                         <IssueReporter issueReporter={props.card.issueReportingUser} updateCard={updateCard} allUsers={props.allUsers} /> 
                         <IssuePriority priorityType={props.card.issuePriority} updateCard={updateCard} />

@@ -48,7 +48,7 @@ const TimeTrackingModal = (props) => {
                 </TimeInput>
                 <TimeInput>
                     <div className="time-remaining">Time Remaining (hours):</div> 
-                    <input defaultValue="Number" value={timeRemaining} type="number" onChange={e => validateRemainingNumber(e)}></input>
+                    <input value={timeRemaining} type="number" onChange={e => validateRemainingNumber(e)}></input>
                 </TimeInput>
             </TimeTrackingModalBox>
         </TimeTrackingModalBackdrop>

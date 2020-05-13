@@ -3,6 +3,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuid } from 'uuid';
 import Modal from '../Modals/DisplayIssueModal';
 import axios from 'axios';
+import Breadcrumbs from "../Modals/ModalComponents/Shared/Breadcrumbs";
 
 
 const grid = 8;
@@ -176,8 +177,11 @@ const KanbanTab = () => {
             })
     }
 
+
+
     return (
     <div className="page">
+        <Breadcrumbs /> 
         <div className="column" style={{display: "flex", width: "100%"}}>
             <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
                 {Object.entries(columns).map(([id, column]) => {

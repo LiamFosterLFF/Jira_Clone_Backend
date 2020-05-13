@@ -52,7 +52,12 @@ module.exports = {
 
 
   // updateMultipleIssues(req, res, next) {
-  //   Issue.updateMany({{issueStatus: req.body.status, } )
+  //   Issue.updateMany( { $and : [
+  //     { issueStatus: req.body.status },
+  //     { columnIndex: { $lte: { req.body.sourceIndex } } },
+  //     { columnIndex: { $gte: { req.body.sourceIndex } } }
+  //     ],
+  //     { $inc: { columnIndex: req.body.incValue } }
   // }
 
   removeIssue(req, res, next) {
