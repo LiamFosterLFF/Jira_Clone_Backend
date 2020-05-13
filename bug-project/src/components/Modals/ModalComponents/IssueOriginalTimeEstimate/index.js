@@ -5,14 +5,14 @@ import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 
 const IssueOriginalTimeEstimate = (props) => {
     return (
-        <div>
+        <div >
             <IssueOriginalTimeEstimateInput >
                 <div className="original-estimate-text">Original Estimate (hours):</div> 
-                <input value={props.estimatedTime.value} onChange={e => props.updateCard("issueEstimatedTime", { value: e.target.value })}></input>
+                <input value={props.estimatedTime} onChange={e => props.updateCard("issueEstimatedTime", e.target.value)}></input>
             </IssueOriginalTimeEstimateInput>
-            <TimeTracking logged={1} estimated={props.estimatedTime.value}>
+            <TimeTracking logged={1} estimated={props.estimatedTime} >
                 <FontAwesomeIcon icon={faStopwatch} />
-                <div className="progress-bar-grey">
+                <div className="progress-bar-grey" onClick={props.onClick}>
                     <div className="progress-bar-blue"></div>
                 </div>
                 <div className="time-tracking-text">

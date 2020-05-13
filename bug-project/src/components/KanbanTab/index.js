@@ -133,6 +133,7 @@ const KanbanTab = () => {
         issueDescription: '',
         issueComments: [{ user: { username: "", avatar: "" }, date: "", text: "" }],
         issueEstimatedTime: 0,
+        issueTimeLogged: 0,
         issueStatus: "",
         issuePriority: "Medium",
         issueReportingUser: { name: "", avatar: "" },

@@ -22,6 +22,9 @@ const IssueSchema = new Schema({
   issueEstimatedTime: {
     type: String,
   },
+  issueTimeLogged: {
+    type: String,
+  },
   issueStatus: {
     type: String,
   },

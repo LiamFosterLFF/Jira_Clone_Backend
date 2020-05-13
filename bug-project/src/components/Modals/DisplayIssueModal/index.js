@@ -13,10 +13,9 @@ import IssueOriginalTimeEstimate from '../ModalComponents/IssueOriginalTimeEstim
 import IssueAddComments from '../ModalComponents/IssueAddComments';
 import { ModalBackdrop, ModalBox, ModalContent } from "./styles";
 import IssueStatistics from '../ModalComponents/IssueStatistics';
-import OutsideClickHandler from 'react-outside-click-handler';
 import DeleteModal from '../DeleteIssueModal';
+import TimeTrackingModal from '../TimeTrackingModal';
 import styled from 'styled-components';
-import axios from 'axios';
 
 const TopBar = styled.div`
     padding: 10px 5px 0px;
@@ -49,6 +48,7 @@ const DisplayIssueModal = (props) => {
 
 
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
+    const [timeTrackingModalIsOpen, setTimeTrackingModalIsOpen] = useState(false);
 
     const handleDeleteIssue = () => {
         props.deleteIssue(props.card._id)
@@ -59,16 +59,21 @@ const DisplayIssueModal = (props) => {
     const handleOutsideClick = (e) => {
         if (!modalBox.current.contains(e.target)) {
             handleCloseModal()
-            
         }
     }
 
-    
     return (
         <div>
         <ModalBackdrop modalIsOpen={props.modalIsOpen} onMouseDown={(e) => handleOutsideClick(e)}>
             <ModalBox ref={modalBox}>
                 <DeleteModal closeModal={() => setDeleteModalIsOpen(false)}  modalIsOpen={deleteModalIsOpen} deleteIssue={() => handleDeleteIssue()}/>
+                <TimeTrackingModal 
+                    modalIsOpen={timeTrackingModalIsOpen} 
+                    closeModal={() => setTimeTrackingModalIsOpen(false)} 
+                    timeLogged={props.card.issueTimeLogged}
+                    estimatedTime={props.card.issueEstimatedTime}
+                    updateCard={updateCard} 
+                />
                 <TopBar>
                     <TopBarLeftSide className="left-side">
                         <IssueTypes issueType={props.card.issueType} updateCard={updateCard}/>
@@ -89,7 +94,7 @@ const DisplayIssueModal = (props) => {
                         <IssueAssignees assignedUsers={props.card.issueAssignedUsers} updateCard={updateCard} allUsers={props.allUsers} />
                         <IssueReporter issueReporter={props.card.issueReportingUser} updateCard={updateCard} allUsers={props.allUsers} /> 
                         <IssuePriority priorityType={props.card.issuePriority} updateCard={updateCard} />
-                        <IssueOriginalTimeEstimate estimatedTime={props.card.issueEstimatedTime} updateCard={updateCard} />
+                        <IssueOriginalTimeEstimate estimatedTime={props.card.issueEstimatedTime} updateCard={updateCard} onClick={() => setTimeTrackingModalIsOpen(true)}/>
                         <IssueStatistics issueStatistics={"ADD ISSUE STATS TO CARD"} />
                     </div>
                 </ModalContent>

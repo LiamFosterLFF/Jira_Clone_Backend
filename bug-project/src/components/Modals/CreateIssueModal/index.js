@@ -51,8 +51,8 @@ const CreateIssueModal = (props) => {
                 project: "5eb576c9fa57d3afd5516338",
                 issueStatus: "Backlog",
                 issueEstimatedTime: 0,
+                issueTimeLogged: 0,
                 issueComments: [],
-
             },
 
             users: {
