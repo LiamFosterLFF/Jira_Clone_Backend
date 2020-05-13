@@ -42,13 +42,18 @@ module.exports = {
     Issue.findById(req.params.id, function(err,issue) {res.send(issue)});
   }, 
 
-  updateIssue(req, res, next) {
+  updateSingleIssue(req, res, next) {
     Issue.findByIdAndUpdate(req.params.id, req.body)
-    .then(project => {
-      res.send(project)
+    .then(issue => {
+      res.send(issue)
     })
     .catch(next)
   },
+
+
+  // updateMultipleIssues(req, res, next) {
+  //   Issue.updateMany({{issueStatus: req.body.status, } )
+  // }
 
   removeIssue(req, res, next) {
     Issue.findByIdAndRemove({ _id: req.params.id })

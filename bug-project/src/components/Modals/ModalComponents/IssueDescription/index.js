@@ -19,8 +19,10 @@ const IssueDescription = (props) => {
     }
 
     useEffect(() => {
-        setDescription(props.issueDescription)
-        setShowEditor(false)
+        if(!props.modalIsOpen) {
+            setDescription(props.issueDescription)
+            setShowEditor(false)
+        }
     }, [props.modalIsOpen])
     
     const quillConfig = {

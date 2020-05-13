@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CloseButtonStyling = styled.div `
+export const DeleteButtonStyling = styled.div `
         padding: 5px 10px;
         color: #aaa;
         float: right;

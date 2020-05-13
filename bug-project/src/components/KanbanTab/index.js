@@ -68,7 +68,6 @@ const KanbanTab = () => {
                         id: issue._id,
                         card: issue
                     }
-                    console.log(columnsCopy, columnId, issue.issueStatus);
                     
                     columnsCopy[columnId].issues.push(issueObject)
                 })
@@ -104,6 +103,12 @@ const KanbanTab = () => {
                     issues: destIssues
                 }
             })
+            const updatedStatus = destColumn.name
+            const updatedCard = {
+                ...removed.card,
+                ["issueStatus"]: updatedStatus
+            }
+            axios.put(`http://localhost:3050/api/issues/${removed.id}`, updatedCard)
         } else {
             const column = columns[source.droppableId];
             const copiedIssues = [...column.issues];
@@ -117,6 +122,7 @@ const KanbanTab = () => {
                     issues: copiedIssues
                 }
             })
+
         }
 
     }
@@ -141,17 +147,31 @@ const KanbanTab = () => {
 
     const updateIssue = (issueId, updatedCard) => {
         axios.put(`http://localhost:3050/api/issues/${issueId}`, updatedCard)
-            .then((updatedIssue) => {
-                // Copy columns, get column by ID, replace updating issue by ID, make a new issue, and add to column, then replace previous column and set to columns
+            .then(() => axios.get(`http://localhost:3050/api/issues/${issueId}`)
+                .then((updatedIssue) => {
+                    // Copy columns, get column by ID, find updating issue by ID, make a new issue, and add to column, then replace previous column and set to columns
+                    const updatedColumns = Object.assign({}, columns)
+                    const columnId = columnIds[updatedIssue.data.issueStatus]
+                    const issueIndex = updatedColumns[columnId].issues.findIndex((issue) => issue.id === updatedIssue.data._id)
+                    const updatedIssueObject = {
+                        id: updatedIssue.data._id,
+                        card: updatedIssue.data
+                    }
+                    updatedColumns[columnId].issues[issueIndex] = updatedIssueObject
+                    setColumns(updatedColumns);
+                })
+            )
+    }
+
+
+    const deleteIssue = (issueId) => {
+        axios.delete(`http://localhost:3050/api/issues/${issueId}`)
+            .then((deletedIssue) => {
                 const updatedColumns = Object.assign({}, columns)
-                const columnId = columnIds[updatedIssue.data.issueStatus]
-                const issueIndex = updatedColumns[columnId].issues.findIndex((issue) => issue.id === updatedIssue.data._id)
-                const updatedIssueObject = {
-                    id: updatedIssue.data._id,
-                    card: updatedIssue.data
-                }
-                updatedColumns[columnId].issues[issueIndex] = updatedIssueObject
-                setColumns(updatedColumns)
+                const columnId = columnIds[deletedIssue.data.issueStatus]
+                const updatedIssues = updatedColumns[columnId].issues.filter((issue) => issue.id !== deletedIssue.data._id)
+                updatedColumns[columnId].issues = updatedIssues
+                setColumns(updatedColumns);
             })
     }
 
@@ -205,7 +225,10 @@ const KanbanTab = () => {
         setCard={setCurrentModalCard}
         updateIssue={updateIssue}
         issueId={currentModalCardId}
-        allUsers={allUsers}></Modal>
+        allUsers={allUsers}
+        deleteIssue={deleteIssue}
+        >
+        </Modal>
         
     </div>
       

@@ -1,20 +1,19 @@
 import styled from 'styled-components';
 
-export const ModalBackdrop = styled.div`
+export const DeleteModalBackdrop = styled.div`
     display: ${props => props.modalIsOpen ? "inherit" : "none"};
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     overflow: auto;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
 `;
 
-
-export const ModalBox = styled.div`
+export const DeleteModalBox = styled.div`
     background-color: #fefefe;
     margin: 8% auto;
     padding: 15px;
@@ -24,7 +23,7 @@ export const ModalBox = styled.div`
     font-size: 12px;
 `;
 
-export const ModalContent = styled.div`
+export const DeleteModalContent = styled.div`
     position: relative;
     top: 0;
     .left-column {
@@ -37,4 +36,3 @@ export const ModalContent = styled.div`
         display: inline-block;
     }
 `;
-

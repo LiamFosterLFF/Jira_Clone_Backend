@@ -4,7 +4,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { CloseButtonStyling } from './styles';
 const CloseButton = props => {
     return (
-        <CloseButtonStyling className="close-button">
+        <CloseButtonStyling onClick={props.onClick} className="close-button">
             <FontAwesomeIcon icon={faTimesCircle} />
         </CloseButtonStyling>
     )

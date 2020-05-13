@@ -20,7 +20,8 @@ module.exports = (app) => {
 
   app.put('/api/users/:id', userControllers.updateUser)
   app.put('/api/projects/:id', projectControllers.updateProject)
-  app.put('/api/issues/:id', issueControllers.updateIssue)
+  app.put('/api/issues/:id', issueControllers.updateSingleIssue)
+  // app.put('/api/issues', issueControllers.updateMultipleIssues)
 
   app.delete('/api/users/:id', userControllers.removeUser)
   app.delete('/api/projects/:id', projectControllers.removeProject)
