@@ -8,6 +8,86 @@ import IssueDescription from '../ModalComponents/IssueDescription';
 import CloseButton from '../ModalComponents/Shared/CloseButton';
 import axios from 'axios';
 import { CreateIssueModalBackdrop, CreateIssueModalBox } from './styles';
+import styled from 'styled-components';
+
+const IssueTypesCreateIssue = styled(IssueTypes)`
+    background-color: #F4F5F7;
+    & .current-type:hover {
+        background-color: #EBECF0;
+    }
+
+    & .current-type:focus {
+        background-color: #ffffff;
+    }
+  
+`;
+
+const IssuePriorityCreateIssue = styled(IssuePriority)`
+    background-color: #F4F5F7;
+    border: 1px solid #d6d6d6;
+    border-radius: 2px;
+    margin: 10px 0px;
+
+    &:hover {
+        background-color: #EBECF0;
+    }
+`;
+
+const IssueAssigneesCreateIssue = styled(IssueAssignees)`
+    background-color: #F4F5F7;
+    border: 1px solid #d6d6d6;
+    border-radius: 2px;
+
+    &:hover {
+        background-color: #EBECF0;
+    }
+`;
+
+const IssueReporterCreateIssue = styled(IssueReporter)`
+    background-color: #F4F5F7;
+    border: 1px solid #d6d6d6;
+    border-radius: 2px;
+
+    &:hover {
+        background-color: #EBECF0;
+    }
+`;
+
+const IssueTitleCreateIssue = styled(IssueTitle)`
+    textarea {
+        background-color: #F4F5F7;
+        border: 1px solid #d6d6d6;
+        border-radius: 2px;
+        width: 98%;
+
+        &:hover {
+            background-color: #EBECF0;
+        }
+    }
+`;
+
+const IssueDescriptionCreateIssue = styled(IssueDescription)`
+    background-color: #F4F5F7;
+    border: 1px solid #d6d6d6;
+    border-radius: 2px;
+
+    &:hover {
+        background-color: #EBECF0;
+    }
+`;
+
+
+const Button = styled.div`
+
+`;
+
+const SaveButton = styled((Button))`
+
+`;
+
+const CancelButton = styled(Button)`
+
+`;
 
 const CreateIssueModal = (props) => {
     
@@ -69,17 +149,42 @@ const CreateIssueModal = (props) => {
     
     return (
         <CreateIssueModalBackdrop modalIsOpen={props.modalIsOpen} onMouseDown={(e) => handleOutsideClick(e)}>
-            <CreateIssueModalBox ref={modalBoxRef}>
-                <CloseButton onClick={() => props.setModalIsOpen(false)}/>
+            <div className="modal-box" ref={modalBoxRef}>
+                <div className="modal-content">
+                    <h1>Create Issue</h1>
+                    <div className="label">
+                        Issue Type
+                        <IssueTypesCreateIssue issueType={newCard.issueType} updateCard={updateCard} className="scooby-doo"/>
+                    </div>
+                    <div className="label">
+                        ShortSummary
+                        <IssueTitleCreateIssue issueTitle={newCard.issueTitle} updateCard={updateCard} />
+                    </div>
+                    <div className="label">
+                        Description
+                        <IssueDescriptionCreateIssue issueDescription={newCard.issueDescription} updateCard={updateCard} modalIsOpen={props.modalIsOpen}/>
+                    </div>
+                    <div className="label">
+                        Reporter
+                        <IssueReporterCreateIssue issueReporter={newCard.issueReportingUser} updateCard={updateCard} allUsers={props.allUsers}/> 
+                    </div>
+                    <div className="label">
+                        Assignees
+                        <IssueAssigneesCreateIssue assignedUsers={newCard.issueAssignedUsers} updateCard={updateCard} allUsers={props.allUsers}/>
+                    </div>
+                    <div className="label">
+                        Priority
+                        <IssuePriorityCreateIssue priorityType={newCard.issuePriority} updateCard={updateCard} />
+                    </div>
+                    <div className="buttons">
+                        <SaveButton onClick={() => submitIssue()}>Create Issue</SaveButton>
+                        <CancelButton onClick={() => props.setModalIsOpen(false)}>Cancel</CancelButton>
+                    </div>
+                </div>
+                
+                
 
-                <IssueTypes issueType={newCard.issueType} updateCard={updateCard}/>
-                <IssueTitle issueTitle={newCard.issueTitle} updateCard={updateCard} />
-                <IssueDescription issueDescription={newCard.issueDescription} updateCard={updateCard} modalIsOpen={props.modalIsOpen}/>
-                <IssueReporter issueReporter={newCard.issueReportingUser} updateCard={updateCard} allUsers={props.allUsers}/> 
-                <IssueAssignees assignedUsers={newCard.issueAssignedUsers} updateCard={updateCard} allUsers={props.allUsers}/>
-                <IssuePriority priorityType={newCard.issuePriority} updateCard={updateCard} />
-                <div onClick={() => submitIssue()}>Create Issue</div>
-            </CreateIssueModalBox>
+            </div>
         </CreateIssueModalBackdrop>
     )
 }

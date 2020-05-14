@@ -40,7 +40,7 @@ const IssueDescription = (props) => {
     }
 
     return (
-        <IssueDescriptionBox show={showEditor}>
+        <IssueDescriptionBox show={showEditor} className={(props.className)? (props.className + " issue-description") : "issue-description"}>
             <ReactQuill 
                 theme="snow" 
                 value={description} 

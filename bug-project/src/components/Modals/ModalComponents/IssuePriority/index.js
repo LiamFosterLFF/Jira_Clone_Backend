@@ -52,7 +52,7 @@ const IssuePriority = (props) => {
 
     return (
         <OutsideClickHandler onOutsideClick={() => setShowDropdown(false)}>
-            <IssuePriorityDropdown showDropdown={showDropdown} className="issue-priority">
+            <IssuePriorityDropdown showDropdown={showDropdown} className={(props.className)? (props.className + " issue-priority") : "issue-priority"}>
                 <CurrentSelection priorityType={props.priorityType} />
                 <Options priorityType={props.priorityType} />
             </IssuePriorityDropdown>

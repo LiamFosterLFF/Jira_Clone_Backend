@@ -13,7 +13,7 @@ const IssueTitle = (props) => {
 
     
     return (
-        <IssueTitleInput>
+        <IssueTitleInput className={(props.className)? (props.className + " issue-title") : "issue-title"}>
             <TextareaAutosize 
                 key="input" 
                 

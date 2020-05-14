@@ -46,7 +46,7 @@ const IssueTypes = (props) => {
 
     return (
         <OutsideClickHandler onOutsideClick={() => setShowDropdown(false)}>
-            <IssueTypesDropdown showDropdown={showDropdown} className="issue-type">
+            <IssueTypesDropdown showDropdown={showDropdown} className={(props.className)? (props.className + " issue-types") : "issue-types"}>
                 <CurrentSelection issueType={props.issueType} />
                 <Options issueType={props.issueType} />
             </IssueTypesDropdown>

@@ -56,7 +56,7 @@ const IssueAssignees = (props) => {
     })
 
     return (
-        <AssignedUserDropdown showDropdown={showDropdown}>
+        <AssignedUserDropdown showDropdown={showDropdown} className={(props.className)? (props.className + " issue-assignees") : "issue-assignees"}>
             {currentAssignedUsersJSX}
             <div className="add-assigned-user-button" onClick={e => setShowDropdown(true)}>Add more +</div>
             <div className="dropdown">

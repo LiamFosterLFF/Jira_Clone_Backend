@@ -63,7 +63,7 @@ const IssueReporter = (props) => {
 
     return (
         <OutsideClickHandler onOutsideClick={() => setShowDropdown(false)}>
-            <IssueReporterDropdown showDropdown={showDropdown} className="issue-reporter">
+            <IssueReporterDropdown showDropdown={showDropdown} className={(props.className)? (props.className + " issue-reporter") : "issue-reporter"}>
                 <CurrentSelection reportingUser={props.issueReporter} />
                 <Options reportingUser={props.issueReporter} />
             </IssueReporterDropdown>

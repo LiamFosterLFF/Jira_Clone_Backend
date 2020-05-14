@@ -11,30 +11,14 @@ height: 100%;
 overflow: auto;
 background-color: rgb(0,0,0);
 background-color: rgba(0,0,0,0.4);
-`;
-
-
-export const CreateIssueModalBox = styled.div`
-    background-color: #fefefe;
-    margin: 8% auto;
-    padding: 15px;
-    border: 1px solid #888;
-    width: 55%;
-    height: 65%;
-    font-size: 12px;
-
-    .close-button {
-        color: #aaa;
-        float: right;
-        top: 0;
-        font - size: 28px;
-        font - weight: bold;
-        
-        &:hover,
-        &:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer
+    .modal-box {
+        background-color: #fefefe;
+        margin: 8% auto;
+        padding: 15px;
+        border: 1px solid #888;
+        width: 55%;
+        height: 65%;
+        font-size: 12px;
     }
 `;
 
