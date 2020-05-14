@@ -133,6 +133,8 @@ const CreateIssueModal = (props) => {
                 issueEstimatedTime: 0,
                 issueTimeLogged: 0,
                 issueComments: [],
+                dateCreated: new Date(),
+                dateUpdated: new Date()
             },
 
             users: {

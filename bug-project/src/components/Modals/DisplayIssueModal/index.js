@@ -8,7 +8,7 @@ import IssueAssignees from '../ModalComponents/IssueAssignees';
 import IssueReporter from '../ModalComponents/IssueReporter';
 import IssueTitle from '../ModalComponents/IssueTitle';
 import IssueDescription from '../ModalComponents/IssueDescription';
-import IssueStatus from '../ModalComponents/DisplayIssueComponents/IssueStatus';
+import IssueStatus from '../ModalComponents/IssueStatus';
 import IssueOriginalTimeEstimate from '../ModalComponents/IssueOriginalTimeEstimate';
 import IssueAddComments from '../ModalComponents/IssueAddComments';
 import { ModalBackdrop, ModalBox, ModalContent } from "./styles";
@@ -95,7 +95,7 @@ const DisplayIssueModal = (props) => {
                         <IssueReporter issueReporter={props.card.issueReportingUser} updateCard={updateCard} allUsers={props.allUsers} /> 
                         <IssuePriority priorityType={props.card.issuePriority} updateCard={updateCard} />
                         <IssueOriginalTimeEstimate estimatedTime={props.card.issueEstimatedTime} updateCard={updateCard} onClick={() => setTimeTrackingModalIsOpen(true)}/>
-                        <IssueStatistics issueStatistics={"ADD ISSUE STATS TO CARD"} />
+                        <IssueStatistics dateCreated={props.card.dateCreated} dateUpdated={props.card.dateUpdated} card={props.card}/>
                     </div>
                 </ModalContent>
             </ModalBox>

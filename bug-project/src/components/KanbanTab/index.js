@@ -69,7 +69,6 @@ const KanbanTab = () => {
                         id: issue._id,
                         card: issue
                     }
-                    
                     columnsCopy[columnId].issues.push(issueObject)
                 })
                 setColumns(columnsCopy)
@@ -139,6 +138,8 @@ const KanbanTab = () => {
         issuePriority: "Medium",
         issueReportingUser: { name: "", avatar: "" },
         issueAssignedUsers: [{ name: "", avatar: "" }],
+        dateCreated: "",
+        dateUpdated: ""
     })
     const [currentModalCardId, setCurrentModalCardId] = useState("")
     const handleIssueClick = (e, issue) => {
@@ -157,7 +158,10 @@ const KanbanTab = () => {
                     const issueIndex = updatedColumns[columnId].issues.findIndex((issue) => issue.id === updatedIssue.data._id)
                     const updatedIssueObject = {
                         id: updatedIssue.data._id,
-                        card: updatedIssue.data
+                        card: {
+                            ...updatedIssue.data,
+                            dateUpdated: new Date()
+                        }
                     }
                     updatedColumns[columnId].issues[issueIndex] = updatedIssueObject
                     setColumns(updatedColumns);
